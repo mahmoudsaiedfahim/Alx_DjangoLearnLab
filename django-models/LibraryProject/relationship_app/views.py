@@ -12,6 +12,8 @@ from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import login_required
+from .models import UserProfile
+from .models import User
 
 # Create your views here.
 def list_books(request):
