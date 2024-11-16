@@ -16,6 +16,6 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(template_name='relationship_app/templates/relationship_app/logout.html'), name= 'logout'),
     path('register/',views.register, name= 'register'),
     path('add_book/',add_book,name='add_book'),
-    path('change_book/<int:pk>/',change_book,name='change_book'),
+    path('edit_book/<int:pk>/',change_book,name='edit_book'),
     path('delete_book/<int:pk>/',delete_book,name='delete_book'),
 ]
