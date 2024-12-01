@@ -4,11 +4,15 @@ from rest_framework import generics
 from .models import Book, Author
 from .serializers import BookSerializer, AuthorSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework import filters
 # Create your views here.
 class CustomBookListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title', 'author', 'publication_year']
+
 
 class CustomBookDetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
