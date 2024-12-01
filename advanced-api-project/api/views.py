@@ -5,6 +5,7 @@ from .models import Book, Author
 from .serializers import BookSerializer, AuthorSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework import filters
+from django_filters import rest_framework
 
 # Create your views here.
 class CustomBookListView(generics.ListAPIView):
