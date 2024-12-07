@@ -1,8 +1,0 @@
-# Ignore virtual environment folder
-Lib/
-Scripts/
-pyvenv.cfg
-
-# Ignore Python cache files
-__pycache__/
-*.pyc
