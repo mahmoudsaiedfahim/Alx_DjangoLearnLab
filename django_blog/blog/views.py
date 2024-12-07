@@ -4,6 +4,8 @@ from django.views.generic import TemplateView, ListView
 from .models import Post
 
 # Create your views here.
+class ProfileView(TemplateView):
+    template_name = 'profile.html'
 class PostsView(ListView):
     model = Post
     template_name = 'posts.html'
