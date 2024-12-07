@@ -4,6 +4,7 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView,
 from .models import Post
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 class ProfileView(TemplateView):
