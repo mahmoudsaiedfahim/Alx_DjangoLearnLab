@@ -3,6 +3,7 @@ from django.contrib.auth import views as auth_views
 from .views import register, HomeView, ProfileView
 from .views import PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView
 from .views import CommentCreateView, CommentUpdateView, CommentDeleteView
+from .views import search_posts, PostByTagListView
 urlpatterns = [
 
     path('', HomeView.as_view(template_name='blog/home.html'), name='home'),  # Define the home view
@@ -23,5 +24,8 @@ urlpatterns = [
     path('comment/<int:pk>/update/', CommentUpdateView.as_view(template_name='blog/comment_update.html'), name='comment_update'),
     path('comment/<int:pk>/delete/', CommentDeleteView.as_view(template_name='blog/comment_delete.html'), name='comment_delete'),
 
+    # Searching & Tagging URLs
+    path('tags/<slug:tag_slug>/', PostByTagListView.as_view(), name='tagged_posts'),
+    path('search/', search_posts, name='search_posts'),
 
 ]
