@@ -3,15 +3,15 @@ from rest_framework import generics, permissions
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from .serializers import UserSerializer, TokenSerializer
-#from django.contrib.auth.models import User
+from .serializers import CustomUserSerializer, LoginSerializer
+#from django.contrib.auth.cmodels import User
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 # Create your views here.
 class UserRegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = CustomUserSerializer
     permission_classes = [permissions.AllowAny]
 
 class CustomAuthToken(ObtainAuthToken):
