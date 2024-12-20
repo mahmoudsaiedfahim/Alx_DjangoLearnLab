@@ -29,7 +29,8 @@ class FollowUserView(generics.GenericAPIView):
 
     def post(self, request, user_id):
         try:
-            user_to_follow = CustomUser.objects.get(id=user_id)
+            #user_to_follow = CustomUser.objects.get(id=user_id)
+            user_to_follow = CustomUser.objects.all()
             if request.user != user_to_follow:
                 request.user.following.add(user_to_follow)
                 Notification.objects.create(
