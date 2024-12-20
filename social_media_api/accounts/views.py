@@ -45,4 +45,15 @@ class FollowUserView(generics.GenericAPIView):
             return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
     
+class UnfollowUserView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, user_id):
+        try:
+            user_to_unfollow = CustomUser.objects.get(id=user_id)
+            request.user.following.remove(user_to_unfollow)
+            return Response({'message': f'You have unfollowed {user_to_unfollow.username}'}, status=status.HTTP_200_OK)
+        except CustomUser.DoesNotExist:
+            return Response({'message': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
