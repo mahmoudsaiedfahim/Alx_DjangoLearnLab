@@ -155,3 +155,12 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Redirect all HTTP connections to HTTPS
 SECURE_SSL_REDIRECT = True
+
+
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Add this line to define STATIC_ROOT
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
