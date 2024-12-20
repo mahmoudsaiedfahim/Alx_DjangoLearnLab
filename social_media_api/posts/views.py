@@ -6,7 +6,7 @@ from rest_framework import filters
 from rest_framework.pagination import PageNumberPagination
 from django_filters import rest_framework
 from rest_framework.response import Response
-from notifications.models import Notification
+from notification.models import Notification
 
 # Create your views here.
 class IsAuthorOrReadOnly(permissions.BasePermission):
