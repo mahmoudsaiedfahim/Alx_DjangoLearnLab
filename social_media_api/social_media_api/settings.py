@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-9-gz$_ga*8v*(f3(*$$qj4mb6cf-e(9$b&3_554num5pe)l#h%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com', 'IP_ADDRESS']
 
 
 # Application definition
@@ -129,3 +129,15 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+# Protect against XSS attacks
+SECURE_BROWSER_XSS_FILTER = True
+
+# Prevent the browser from rendering the page in a frame
+X_FRAME_OPTIONS = 'DENY'
+
+# Prevent the browser from MIME-sniffing a response away from the declared content-type
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Redirect all HTTP connections to HTTPS
+SECURE_SSL_REDIRECT = True
