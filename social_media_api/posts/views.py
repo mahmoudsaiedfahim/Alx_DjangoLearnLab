@@ -1,36 +1,47 @@
 from django.shortcuts import render
 from rest_framework import viewsets, generics, permissions, status
 from rest_framework.decorators import api_view, permission_classes
-from .serializers import Post, Comment, CommentSerializer, PostSerializer
+from .serializers import PostSerializer, CommentSerializer, LikeSerializer
+from .models import Post, Comment, Like
 from rest_framework import filters
 from rest_framework.pagination import PageNumberPagination
 from django_filters import rest_framework
 from rest_framework.response import Response
 from notifications.models import Notification
-from .models import Like, Comment
 
 
-# Create your views here.
+# Create Views for CRUD Operations
+
+# Custom permission to only allow authors of an object to edit or delete it.
 class IsAuthorOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
+        # Read permissions are allowed to any request
         if request.method in permissions.SAFE_METHODS:
             return True
         
+        # Write permissions are only allowed to the author of the post/comment
         return obj.author == request.user
 
+    
+
+# Post view
 class PostView(viewsets.ModelViewSet):
     queryset = Post.objects.all()
-    serializer_class = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
-
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+    
     filter_backends = [rest_framework.DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['title']
     search_fields = ['title', 'content']
     pagination_class = PageNumberPagination
 
+
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
 
+
+# Comment view
 class CommentView(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
@@ -49,6 +60,8 @@ class CommentView(viewsets.ModelViewSet):
                 target = post
             )
 
+
+
 # A Feed view to display posts of following users 
 class FeedView(generics.ListAPIView):
     serializer_class = PostSerializer
@@ -59,14 +72,14 @@ class FeedView(generics.ListAPIView):
         following_users = self.request.user.following.all()
 
         # Retrieve post from the users the current user is following, ordering by most recent date created
-        return PostView.objects.filter(author__in=following_users).order_by("-created_at")
+        return Post.objects.filter(author__in=following_users).order_by("-created_at")
 
 
 # Defining a view for liking posts
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def like_post(request, pk):
-    post = generics.get_object_or_404(PostView, pk=pk)
+    post = generics.get_object_or_404(Post, pk=pk)
     like, created = Like.objects.get_or_create(user=request.user, post=post)
     if created:
         Notification.objects.create(
@@ -83,7 +96,7 @@ def like_post(request, pk):
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def unlike_post(request, pk):
-    post = generics.get_object_or_404(PostView, pk=pk)
+    post = generics.get_object_or_404(Post, pk=pk)
     try:
         like = Like.objects.get(user=request.user, post=post)
         like.delete()
